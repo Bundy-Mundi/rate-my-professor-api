@@ -14,3 +14,7 @@ API for Rate My Professor (CSULB only)
     - When 'by' is either "college" or "subject" => Course code
     - When 'by' is "ge" => GE area code
   3. `?rating`: Less than or equal to 5
+
+## Live Server
+
+- [Link](https://eflask-7778.herokuapp.com/)
