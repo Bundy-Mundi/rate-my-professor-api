@@ -1,22 +1,10 @@
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-
 import threading
 import time
-
-from bs4 import BeautifulSoup
 import requests
-
-RATE_MY_PROFESSOR_BASEURL = "https://www.ratemyprofessors.com"
+from bs4 import BeautifulSoup
 
 class CSULB:
     def __init__(self):
-        # self.driver = webdriver.Chrome(ChromeDriverManager().install())
-        self.driver = None
         self.results = []
         self.rmpUrl = "https://www.ratemyprofessors.com/"
         
@@ -24,6 +12,7 @@ class CSULB:
         self.school = "California State University Long Beach"
         self.col_class_id = 0
         self.col_prof_name = 9
+
         self.card_class = "TeacherCard__StyledTeacherCard-syjs0d-0"
         self.rating_class = "CardNumRating__CardNumRatingNumber-sc-17t4b9u-2"
         self.name_class = "CardName__StyledCardName-sc-1gyrgim-0"
@@ -53,18 +42,6 @@ class CSULB:
                 course_code = new_course_code
             results.append({"course_code": course_code, "course_name": course_name, "name": tds[self.col_prof_name].text, "class_id": tds[self.col_class_id].text})
         return results
-
-    '''
-    def extract_professor_names_selenium(self, url:str):
-        professors = []
-        self.driver.get(url)
-        blocks = self.driver.find_elements_by_class_name("courseBlock")
-        for block in blocks:
-            tds = block.find_elements_by_tag_name("td")
-            name = tds[self.col].text
-            professors.append(name)
-        return professors
-    '''
     
     def search_professor(self, course_code:str, course_name:str, prof:str, class_id:str, results:list):
         url = f"https://www.ratemyprofessors.com/search/teachers?query={prof}&sid={self.sid}"
@@ -72,7 +49,7 @@ class CSULB:
         soup = BeautifulSoup(r.content, "html.parser")
         cards = soup.find_all(class_=self.card_class, href=True)
         for c in cards:
-            link = f"{RATE_MY_PROFESSOR_BASEURL}{c['href']}"
+            link = f"{self.rmpUrl}{c['href']}"
             rating = c.find(class_=self.rating_class).text
             fullname = c.find(class_=self.name_class).text
             major = c.find(class_=self.major_class).text
