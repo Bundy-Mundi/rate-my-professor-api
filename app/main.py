@@ -35,12 +35,12 @@ def spring_view():
         rating_limit = request.args.get("rating")
 
         if not by in SET:
-                return response(json.dumps({"error": "Wrong args"}))
+                return json.dumps({"error": "Wrong args"})
         if by == "ge":
                 # If sorted by GE, then change query to area
                 query = request.args.get("area")
         if not query:
-                return response(json.dumps({"error": "Wrong args"}))
+                return json.dumps({"error": "Wrong args"})
        
         url = f"http://web.csulb.edu/depts/enrollment/registration/class_schedule/Spring_{YEAR}/{SET[by]}/{query}.html"
         x = c.search_professors_in_page(url)
@@ -52,14 +52,14 @@ def spring_view():
                 for el in x:
                         if el["rating"] >= float(rating_limit):
                                 filtered_result.append(el)
-                return response(json.dumps(filtered_result))
+                return json.dumps(filtered_result)
         
         ## By upper & lower division
         ## By Course Code
         ## By Course Name
         ## By Prof Name
 
-        return response(json.dumps(x))
+        return json.dumps(x)
 
 
 @app.route("/fall")
@@ -85,4 +85,4 @@ def list_view():
                 item = l.find("a")
                 code = item.attrs['href'].split('.')[0]
                 results.append({"text": item.text, "code":code, "link": item.attrs['href']})
-        return response(json.dumps(results))
+        return Response(json.dumps(results))
