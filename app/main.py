@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from flask import Response
 from flask_cors import CORS
 from rate_my_professor import CSULB
 from bs4 import BeautifulSoup
@@ -15,7 +16,8 @@ SET = {"subject":BY_SUBJECT, "college":BY_COLLEGE, "ge":BY_GE}
 
 app = Flask(__name__)
 CORS(app) 
-
+response = Response()
+response.headers["Access-Control-Allow-Origin"] = "*"
 @app.route("/")
 def home_view():
         return "Hello World 2022"
@@ -81,4 +83,4 @@ def list_view():
                 item = l.find("a")
                 code = item.attrs['href'].split('.')[0]
                 results.append({"text": item.text, "code":code, "link": item.attrs['href']})
-        return json.dumps(results)
+        return Response(json.dumps(results))
