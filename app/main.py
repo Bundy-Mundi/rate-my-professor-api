@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from flask_cors import CORS
 from rate_my_professor import CSULB
 from bs4 import BeautifulSoup
 import requests
@@ -13,7 +14,8 @@ BY_GE = "By_GE_Requirement"
 SET = {"subject":BY_SUBJECT, "college":BY_COLLEGE, "ge":BY_GE}
 
 app = Flask(__name__)
- 
+CORS(app) 
+
 @app.route("/")
 def home_view():
         return "Hello World 2022"
