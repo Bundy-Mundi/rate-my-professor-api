@@ -42,12 +42,12 @@ def spring_view():
         # Filters
         ## By Rating
         if rating_limit:
-                if rating_limit > 5: return json.dumps({"error": "Rating cannot be higher than 5.0"})
+                if float(rating_limit) > 5: return json.dumps({"error": "Rating cannot be higher than 5.0"})
                 for el in x:
                         if el["rating"] >= float(rating_limit):
                                 filtered_result.append(el)
                 return json.dumps(filtered_result)
-
+        
         ## By upper & lower division
         ## By Course Code
         ## By Course Name
