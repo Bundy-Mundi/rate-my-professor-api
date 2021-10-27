@@ -55,7 +55,28 @@ def spring_view():
 
         return json.dumps(x)
 
+
 @app.route("/fall")
 def fall_view():
         url = f"http://web.csulb.edu/depts/enrollment/registration/class_schedule/Fall_{YEAR}/{SET[by]}/index.html"
         return url
+
+@app.route("/spring/list")
+def list_view():
+        results = []
+        big_lists = None
+        url = f"http://web.csulb.edu/depts/enrollment/registration/class_schedule/Spring_{YEAR}/"
+        by = request.args.get("by")
+        if not by: return json.dumps({"error":"Wrong args"})
+        if not by in SET:
+                return json.dumps({"error": "Wrong args"})
+
+        url = f"{url}{SET[by]}/"
+        r = requests.get(url)
+        soup = BeautifulSoup(r.content, "html.parser")
+        lists = soup.find(class_="indexList").find_all("li")
+        for l in lists:
+                item = l.find("a")
+                code = item.attrs['href'].split('.')[0]
+                results.append({"text": item.text, "code":code, "link": item.attrs['href']})
+        return json.dumps(results)
