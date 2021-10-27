@@ -85,4 +85,4 @@ def list_view():
                 item = l.find("a")
                 code = item.attrs['href'].split('.')[0]
                 results.append({"text": item.text, "code":code, "link": item.attrs['href']})
-        return Response(json.dumps(results))
+        return json.dumps(results)
