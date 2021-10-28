@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 class CSULB:
     def __init__(self):
         self.results = []
-        self.rmpUrl = "https://www.ratemyprofessors.com/"
+        self.rmpUrl = "https://www.ratemyprofessors.com"
         
         self.sid = "U2Nob29sLTE2Mg==" # sid of csu longbeach for Rate my professor
         self.school = "California State University Long Beach"
@@ -40,7 +40,7 @@ class CSULB:
                 course_name = new_course_name
             if course_code == None or course_code != new_course_code:
                 course_code = new_course_code
-            results.append({"course_code": course_code, "course_name": course_name, "name": tds[self.col_prof_name].text, "class_id": tds[self.col_class_id].text})
+            results.append({"course_code": course_code, "course_name": course_name, "name": tds[self.col_prof_name].text, "class_id": class_id})
         return results
     
     def search_professor(self, course_code:str, course_name:str, prof:str, class_id:str, results:list):
@@ -81,8 +81,3 @@ class CSULB:
             thread.join()
         self.results = results
         return results
-
-    def asyncFind(self, timing:int, tupleArg):
-        return WebDriverWait(self.driver, timing).until(
-            EC.presence_of_element_located(tupleArg)
-        )

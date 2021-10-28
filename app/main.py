@@ -1,7 +1,6 @@
 from flask import Flask
 from flask import request
 from flask import Response
-from flask_cors import CORS
 from rate_my_professor import CSULB
 from bs4 import BeautifulSoup
 import requests
@@ -15,7 +14,6 @@ BY_GE = "By_GE_Requirement"
 SET = {"subject":BY_SUBJECT, "college":BY_COLLEGE, "ge":BY_GE}
 
 app = Flask(__name__)
-CORS(app) 
 response = Response()
 response.headers["Access-Control-Allow-Origin"] = "*"
 response.headers["Content-Type"] = "application/json"
@@ -31,14 +29,11 @@ def spring_view():
 
         # Queries
         by = request.args.get("by")
-        query = request.args.get("major")
+        query = request.args.get("q")
         rating_limit = request.args.get("rating")
 
         if not by in SET:
                 return json.dumps({"error": "Wrong args"})
-        if by == "ge":
-                # If sorted by GE, then change query to area
-                query = request.args.get("area")
         if not query:
                 return json.dumps({"error": "Wrong args"})
        
@@ -70,10 +65,10 @@ def fall_view():
 @app.route("/spring/list")
 def list_view():
         results = []
-        big_lists = None
         url = f"http://web.csulb.edu/depts/enrollment/registration/class_schedule/Spring_{YEAR}/"
         by = request.args.get("by")
-        if not by: return json.dumps({"error":"Wrong args"})
+        if not by: 
+                return json.dumps({"error":"Wrong args"})
         if not by in SET:
                 return json.dumps({"error": "Wrong args"})
 
