@@ -10,7 +10,7 @@ API for Rate My Professor (CSULB only)
 - Queries
 
   1. `?by (required)`: "college"|"subject"|"ge"
-  2. `?query (required)`: 
+  2. `?q (required)`: 
     - When 'by' is either "college" or "subject" => Course code
     - When 'by' is "ge" => GE area code
   3. `?rating`: Less than or equal to 5
