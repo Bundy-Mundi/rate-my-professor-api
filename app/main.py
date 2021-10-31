@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import request
+from flask import request, redirect, render_template
 from flask import Response
 from rate_my_professor import CSULB
 from bs4 import BeautifulSoup
@@ -18,9 +18,21 @@ response = Response()
 response.headers["Access-Control-Allow-Origin"] = "*"
 response.headers["Content-Type"] = "application/json"
 
+def list_view(term, year, by):
+        results = []
+        url = f"http://web.csulb.edu/depts/enrollment/registration/class_schedule/{term.title()}_{year}/{SET[by]}"
+        r = requests.get(url)
+        soup = BeautifulSoup(r.content, "html.parser")
+        lists = soup.find(class_="indexList").find_all("li")
+        for l in lists:
+                item = l.find("a")
+                code = item.attrs['href'].split('.')[0]
+                results.append({"text": item.text, "code":code, "link": item.attrs['href']})
+        return results
+
 @app.route("/")
 def home_view():
-        return "Hello World 2022"
+        return render_template("index.html", content=list_view("spring", YEAR, "college"))
 
 @app.route("/spring")
 def spring_view():
@@ -55,29 +67,3 @@ def spring_view():
         ## By Prof Name
 
         return json.dumps(x)
-
-
-@app.route("/fall")
-def fall_view():
-        url = f"http://web.csulb.edu/depts/enrollment/registration/class_schedule/Fall_{YEAR}/{SET[by]}/index.html"
-        return url
-
-@app.route("/spring/list")
-def list_view():
-        results = []
-        url = f"http://web.csulb.edu/depts/enrollment/registration/class_schedule/Spring_{YEAR}/"
-        by = request.args.get("by")
-        if not by: 
-                return json.dumps({"error":"Wrong args"})
-        if not by in SET:
-                return json.dumps({"error": "Wrong args"})
-
-        url = f"{url}{SET[by]}/"
-        r = requests.get(url)
-        soup = BeautifulSoup(r.content, "html.parser")
-        lists = soup.find(class_="indexList").find_all("li")
-        for l in lists:
-                item = l.find("a")
-                code = item.attrs['href'].split('.')[0]
-                results.append({"text": item.text, "code":code, "link": item.attrs['href']})
-        return json.dumps(results)
