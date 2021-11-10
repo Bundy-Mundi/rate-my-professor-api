@@ -12,18 +12,19 @@ BY_SUBJECT = "By_Subject"
 BY_COLLEGE = "By_College"
 BY_GE = "By_GE_Requirement"
 SET = {"subject":BY_SUBJECT, "college":BY_COLLEGE, "ge":BY_GE}
+CLASS_SCHEDULE_BASE_URL = "http://web.csulb.edu/depts/enrollment/registration/class_schedule"
 
 app = Flask(__name__)
 response = Response()
 response.headers["Access-Control-Allow-Origin"] = "*"
 response.headers["Content-Type"] = "application/json"
 
-def list_view(term, year, by):
+def list_data(term, year, by):
         results = []
-        url = f"http://web.csulb.edu/depts/enrollment/registration/class_schedule/{term.title()}_{year}/{SET[by]}"
+        url = f"{CLASS_SCHEDULE_BASE_URL}/{term.title()}_{year}/{SET[by]}/"
         r = requests.get(url)
         soup = BeautifulSoup(r.content, "html.parser")
-        lists = soup.find(class_="indexList").find_all("li")
+        lists = soup.find(class_=BOX_CLASS).find_all("li")
         for l in lists:
                 item = l.find("a")
                 code = item.attrs['href'].split('.')[0]
@@ -32,38 +33,37 @@ def list_view(term, year, by):
 
 @app.route("/")
 def home_view():
-        return render_template("index.html", content=list_view("spring", YEAR, "college"))
+        return render_template("index.html")
 
 @app.route("/spring")
 def spring_view():
-        filtered_result=[]
-        c = CSULB()
-
-        # Queries
+        term = "spring"
+        year = request.args.get("year")
         by = request.args.get("by")
-        query = request.args.get("q")
-        rating_limit = request.args.get("rating")
-
+        code = request.args.get("q")
         if not by in SET:
                 return json.dumps({"error": "Wrong args"})
-        if not query:
+        if not by:
                 return json.dumps({"error": "Wrong args"})
-       
-        url = f"http://web.csulb.edu/depts/enrollment/registration/class_schedule/Spring_{YEAR}/{SET[by]}/{query}.html"
-        x = c.search_professors_in_page(url)
+        if code:
+                c = CSULB()
+                url = f"{CLASS_SCHEDULE_BASE_URL}/{term.title()}_{YEAR}/{SET[by]}/{code}.html"
+                data = c.search_professors_in_page(url)
+                return render_template("index.html", data=data, term=term, year=year, by=by)
+        return render_template("index.html", content=list_data(term, year, by), term=term, year=year, by=by)
 
-        # Filters
-        ## By Rating
-        if rating_limit:
-                if float(rating_limit) > 5: return json.dumps({"error": "Rating cannot be higher than 5.0"})
-                for el in x:
-                        if el["rating"] >= float(rating_limit):
-                                filtered_result.append(el)
-                return json.dumps(filtered_result)
-        
-        ## By upper & lower division
-        ## By Course Code
-        ## By Course Name
-        ## By Prof Name
-
-        return json.dumps(x)
+@app.route("/fall")
+def fall_view():
+        term = "fall"
+        year = request.args.get("year")
+        by = request.args.get("by")
+        code = request.args.get("q")
+        if not by in SET:
+                return json.dumps({"error": "Wrong args"})
+        if not by:
+                return json.dumps({"error": "Wrong args"})
+        if code:
+                c = CSULB()
+                url = f"{CLASS_SCHEDULE_BASE_URL}/{term.title()}_{YEAR}/{SET[by]}/{code}.html"
+                return render_template("index.html", data=c.search_professors_in_page(url), term=term, year=year, by=by)
+        return render_template("index.html", content=list_data(term, year, by), term=term, year=year, by=by)

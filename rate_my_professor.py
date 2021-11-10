@@ -79,5 +79,6 @@ class CSULB:
             x.start()
         for thread in threads:
             thread.join()
+        results = sorted(results, key = lambda x: x['rating'], reverse=True)
         self.results = results
         return results
