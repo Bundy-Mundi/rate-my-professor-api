@@ -34,11 +34,30 @@
     </header>
     <main class="p-6 relative z-0">
         {% if home %}
-            <div class="relative flex items-center justify-center h-screen w-full bg-black">
-                <h1 class="text-white absolute top-1/2 left-1/2" style="transform: translate(-50%, -50%);">Welcome to CSULB professor rating viewer</h1>
+            <div style="background-image: url('https://images.unsplash.com/photo-1527019918060-f08f8508fe28?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80');" class="bg-no-repeat bg-cover text-gray-900 rounded-lg relative flex items-center justify-center h-96 lg:h-screen w-full bg-white">
+                <h1 class="absolute top-1/3 text-4xl lg:text-6xl font-bold mb-6" style="transform: translateY(-50%);">Welcome to </br>CSULB Professor</br>Rating Viewer</h1>
+                <div class="absolute top-2/3" style="transform: translateY(-50%);">
+                    <div class="">
+                        <p class="text-2xl lg:text-4xl font-semibold mb-3">Check out the latest semester</p>
+                        <div class="w-full h-full flex justify-between items-center">
+                            <a href="/spring?year=2022&by=ge" class="w-full h-full">
+                                <button class="border-2 border-gray-900 hover:shadow-lg w-40 h-12 bg-gray-700 text-white px-6-py-3 rounded-lg">GE</button>
+                            </a>
+                            <a href="/spring?year=2022&by=subject"><button class="border-2 border-gray-900 hover:shadow-lg w-40 h-12 bg-gray-700 text-white px-6-py-3 rounded-lg">Subject</button></a>
+                        </div>
+                    </div>
+                </div>
             </div>
         {% else %}
             <div class="h-full w-full">
+                <h3 class="text-3xl font-light mb-10">{{year}} {{term}} 
+                    {% if 'ge' == by %}
+                        GE
+                    {% elif 'subject' == by %}
+                        Subject
+                    {% endif %}
+                    courses
+                </h3>
                 {% if content %}
                     {% for item in content %}
                     <a class="h-full w-full" href="/{{term}}?year={{year}}&by={{by}}&q={{item.code}}">
@@ -96,6 +115,16 @@
             {% endif %}
         {% endif %} <!-- Home conditional statement ends here -->
     </main>
-    <footer></footer>
+    <footer class="relative bottom-0 bg-gray-700 text-white px-3 h-48 lg:h-56 w-full">
+        <div class="flex items-center justify-start h-full">
+            <ul>
+                <li><a href="https://github.com/Bundy-Mundi/">GitHub</a></li>
+                <li>Email: ben.kweon01@student.csulb.edu</li>
+            </ul>
+        </div>
+        <span class="text-gray-400 absolute bottom-px text-xs">
+            <p>Copyright &copy; 2022 | Ben Kweon All Rights Reserved</p>
+        </span>
+    </footer>
 </body>
 </html>
