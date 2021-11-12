@@ -17,93 +17,84 @@
     <title>Professor Rating | CSULB</title>
 </head>
 <body class="bg-gray-200">
-    <header class="">
-        <nav class="bg-white p-6">
-            <ul>
-                <li>
-                    <a href="/spring?year=2022&by=ge">GE classes: Spring 2022</a>
+    <header class="sticky top-0 bg-gray-700 text-white z-50">
+        <nav class="p-6">
+            <ul class="flex justify-evenly items-center lg:justify-start">
+                <li class="lg:mr-10">
+                    <a href="/">Home</a>
                 </li>
-                <li>
-                    <a href="/fall?year=2021&by=ge">GE classes: Fall 2021</a>
+                <li class="lg:mr-10">
+                    <a href="/spring?year=2022&by=ge">Spring 2022 GE</a>
                 </li>
-                <li>
-                    <a href="/spring?year=2022&by=subject">General: Spring 2022</a>
-                </li>
-                <li>
-                    <a href="/fall?year=2021&by=subject">General: Fall 2021</a>
+                <li class="lg:mr-10">
+                    <a href="/spring?year=2022&by=subject">Spring 2022</a>
                 </li>
             </ul>
         </nav>
     </header>
-    <main class="p-6">
-        {% if (not content and not data) %}
-            <div class="absolute grid grid-cols-2 bg-white border shadow rounded-lg top-1/2 left-1/2 w-6/12 h-64" style="transform: translate(-50%, -50%);">
-                <a class="flex items-center justify-center hover:bg-gray-500 hover:text-gray-200 h-full w-full" href="/spring?year=2022&by=ge">
-                    <div class="flex items-center justify-center text-lg">
-                        <p>Spring 2022 GE</p>
-                    </div>
-                </a>
-                <a class="flex items-center justify-center hover:bg-gray-500 hover:text-gray-200 h-full w-full" href="/fall?year=2021&by=ge">
-                    <div class="flex items-center justify-center text-lg">
-                        <p>Fall 2021 GE</p>
-                    </div>
-                </a>
-                <a class="flex items-center justify-center hover:bg-gray-500 hover:text-gray-200 h-full w-full" href="/spring?year=2022&by=subject">
-                    <div class="flex items-center justify-center text-lg">
-                        <p>Spring 2022 Course</p>
-                    </div>
-                </a>
-                <a class="flex items-center justify-center hover:bg-gray-500 hover:text-gray-200 h-full w-full" href="/fall?year=2021&by=subject">
-                    <div class="flex items-center justify-center text-lg">
-                        <p>Fall 2021 Course</p>
-                    </div>
-                </a>
+    <main class="p-6 relative z-0">
+        {% if home %}
+            <div class="relative flex items-center justify-center h-screen w-full bg-black">
+                <h1 class="text-white absolute top-1/2 left-1/2" style="transform: translate(-50%, -50%);">Welcome to CSULB professor rating viewer</h1>
             </div>
-        {% endif %}
-        <div class="h-full w-full">
-
-            {% if content %}
-                {% for item in content %}
-                <a class="h-full w-full" href="/{{term}}?year={{year}}&by={{by}}&q={{item.code}}">
-                    <div class="border border-1 bg-white rounded-lg p-6 mb-3 shadow text-lg font-bold">
-                        <p>{{item.text}}</p>
-                    </div>
-                </a>
-                {% endfor %}
-            {% endif %}
-            {% if data %}
-                {% for item in data %}
-                <a class="h-full w-full" href="{{item.link}}"> 
-                    <div class="border border-1 bg-white rounded-lg p-3 mb-3 shadow">
-                        <div class="p-3">
-                            <div class="text-4xl my-2 font-bold">
-                                {% if item.rating > 4 %}
-                                    <div class="text-green-700 flex justify-between items-end w-64"><p>Rating: {{item.rating}}</p><p class="text-lg">/ 5.0</p></div>
-                                {% elif item.rating > 3 %}
-                                    <div class="text-yellow-500 flex justify-between items-end w-64"><p>Rating: {{item.rating}}</p><p class="text-lg">/ 5.0</p></div>
-                                {% else %}
-                                    <div class="text-red-700 flex justify-between items-end w-64"><p>Rating: {{item.rating}}</p><p class="text-lg">/ 5.0</p></div>
-                                {% endif %}
-                            </div>
-                            <div class="my-4 flex justify-between ">
-                                <div class="">
-                                    <p>Professor: {{item.fullname}}</p>
-                                    <p>Course Name: {{item.course_name}}</p>
-                                    <p>Course Code: {{item.course_code}}</p>
-                                    <p>Professor Major: {{item.major}}</p>
+        {% else %}
+            <div class="h-full w-full">
+                {% if content %}
+                    {% for item in content %}
+                    <a class="h-full w-full" href="/{{term}}?year={{year}}&by={{by}}&q={{item.code}}">
+                        <div class="border border-1 bg-white rounded-lg p-6 mb-3 shadow text-lg font-bold">
+                            <p>{{item.text}}</p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                {% endif %}
+                {% if data %}
+                    {% for item in data %}
+                    <a class="h-full w-full" href="{{item.link}}"> 
+                        <div class="border border-1 bg-white rounded-lg p-3 mb-3 shadow">
+                            <div class="p-3">
+                                <div class="text-4xl my-2 font-bold">
+                                    {% if item.rating > 4 %}
+                                        <div class="text-green-700 flex justify-between items-end w-64"><p>Rating: {{item.rating}}</p><p class="text-lg">/ 5.0</p></div>
+                                    {% elif item.rating > 3 %}
+                                        <div class="text-yellow-500 flex justify-between items-end w-64"><p>Rating: {{item.rating}}</p><p class="text-lg">/ 5.0</p></div>
+                                    {% else %}
+                                        <div class="text-red-700 flex justify-between items-end w-64"><p>Rating: {{item.rating}}</p><p class="text-lg">/ 5.0</p></div>
+                                    {% endif %}
                                 </div>
-                                <div class="">
-                                    <p>Take Again: {{item.takeAgain}}</p>
-                                    <p>Class ID for Enrollment: {{item.classID}}</p>
-                                    <p>Difficulty: {{item.difficulty}}</p>
+                                <div class="my-4 lg:flex lg:justify-between">
+                                    <div class="font-light text-xl mb-3">
+                                        <p>Professor: {{item.fullname}}</p>
+                                        <p>Major: {{item.major}}</p>
+                                    </div>
+                                    <div class="mb-3 font-semibold text-xs lg:text-base">
+                                        <p>Take Again: {{item.takeAgain}}</p>
+                                        <p>Class ID for Enrollment: {{item.classID}}</p>
+                                        <p>Difficulty: {{item.difficulty}}</p>
+                                        <p>Course Name: {{item.course_name}}</p>
+                                        <p>Course Code: {{item.course_code}}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </a>
-                {% endfor %}
+                    </a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            {% if not content and not data %}
+                <div>
+                    <p>The result you are looking for is not available.</p>
+                    <p>This maybe because ...</p>
+                    <p>The course description data has not been completely updated yet.</p>
+                    <p>We ignore the data which has the professor name with "Staff."</p>
+                    <a href="/">
+                        <button class="border px-6 py-3 rounded bg-gray-700 text-white">
+                            Go back to home
+                        </button>
+                    </a>
+                </div>
             {% endif %}
-        </div>
+        {% endif %} <!-- Home conditional statement ends here -->
     </main>
     <footer></footer>
 </body>

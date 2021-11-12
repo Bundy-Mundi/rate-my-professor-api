@@ -33,7 +33,7 @@ def list_data(term, year, by):
 
 @app.route("/")
 def home_view():
-        return render_template("index.html")
+        return render_template("index.html", home=True)
 
 @app.route("/spring")
 def spring_view():
