@@ -7,7 +7,7 @@ import requests
 import json
 
 YEAR = 2022
-BOX_CLASS = "pageContent"
+BOX_ID = "pageContent"
 BY_SUBJECT = "By_Subject"
 BY_COLLEGE = "By_College"
 BY_GE = "By_GE_Requirement"
@@ -24,7 +24,7 @@ def list_data(term, year, by):
         url = f"{CLASS_SCHEDULE_BASE_URL}/{term.title()}_{year}/{SET[by]}/"
         r = requests.get(url)
         soup = BeautifulSoup(r.content, "html.parser")
-        lists = soup.find(class_=BOX_CLASS).find_all("li")
+        lists = soup.find(id=BOX_ID).find_all("li")
         for l in lists:
                 item = l.find("a")
                 code = item.attrs['href'].split('.')[0]
