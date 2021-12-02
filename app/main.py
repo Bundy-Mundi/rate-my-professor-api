@@ -7,7 +7,7 @@ import requests
 import json
 
 YEAR = 2022
-BOX_CLASS = "indexList"
+BOX_CLASS = "pageContent"
 BY_SUBJECT = "By_Subject"
 BY_COLLEGE = "By_College"
 BY_GE = "By_GE_Requirement"
