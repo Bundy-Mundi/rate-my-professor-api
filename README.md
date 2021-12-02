@@ -1,8 +1,5 @@
-# rate-my-professor-api
-API for Rate My Professor (CSULB only)
+# API for Rate My Professor - CSULB only **(DEPRECIATED)**
 
-## Installation
+## Live Server
 
-> In progress ...
-
-## Live Server => [https://eflask-7778.herokuapp.com/](https://eflask-7778.herokuapp.com/)
+- Currently not available
